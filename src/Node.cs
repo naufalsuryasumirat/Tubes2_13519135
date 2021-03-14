@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Classes
 {
@@ -550,6 +551,30 @@ namespace Classes
             PrintAll(newGraph.BFS("A", "H"));
             Console.WriteLine("DFS");
             PrintAll(newGraph.DFS("A", "H"));
+
+            // READING FROM FILE
+            Console.WriteLine("READING FROM FILE");
+            Graph fileGraph = new Graph();
+            string filename = "../../test.txt";
+            string line;
+            int lineCount;
+            var sr = new StreamReader(filename);
+            line = sr.ReadLine();
+            lineCount = Convert.ToInt32(line); // converting string to int
+            for (int i = 0; i < lineCount; i++)
+            {
+                line = sr.ReadLine();
+                var vars = line.Split(new[] {' '});
+                fileGraph.addConnection(vars[0], vars[1]);
+                Console.WriteLine(line);
+            }
+            sr.Close();
+            Console.WriteLine("Mutuals");
+            PrintMutuals(fileGraph.getMutuals("A"));
+            Console.WriteLine("BFS");
+            PrintAll(fileGraph.BFS("A", "H"));
+            Console.WriteLine("DFS");
+            PrintAll(fileGraph.DFS("A", "H"));
 
             Console.ReadLine();
         }

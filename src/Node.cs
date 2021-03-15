@@ -8,22 +8,22 @@ using System.IO;
 namespace Classes
 {
     // Define classes here
-    // nanti yang ditandain TEST diapus
-	public class Node
+    // nanti yang ditandain TEST diapus / dicek
+	public class Node // Class Node (Simpul)
     {
-        private Node fromNode; // node / string?
-        private string Name;
-		private bool Visited;
-        private List<Node> CNodes; // Array of connected nodes
-        private int Count;
-        public Node() // Default Constructor
+        private Node fromNode; // Menyimpan Node sebelumnya yang dilewati untuk mencapai Node ini (Digunakan untuk Algoritma Breadth-First Search dan Depth-First Search)
+        private string Name; // Menyimpan Nama dari simpul
+		private bool Visited; // Status telah dikunjungi atau belum
+        private List<Node> CNodes; // Menyimpan Node/Simpul yang bertetangga (adjacent)
+        private int Count; // Menyimpan jumlah node yang bertetangga (Mungkin tidak perlu) TEST
+        public Node() // Default Constructor, mungkin tidak digunakan TEST
         {
             this.fromNode = null;
             this.Name = null;
-            this.CNodes = null;
+            this.CNodes = new List<Node>();
             this.Visited = false;
         }
-        public Node(string Name) // User-defined Constructor
+        public Node(string Name) // User-defined Constructor, fromNode = null, Name = parameter Name, CNodes = List<Node> baru yang kosong, Status Dikunjungi = false, Count = 0
         {
             this.fromNode = null;
             this.Name = Name;
@@ -47,11 +47,11 @@ namespace Classes
         {
             this.Visited = false;
         }
-        public void addCount() // Add int Count by 1
+        public void addCount() // Menambahkan Count sebanyak 1
         {
             this.Count++;
         }
-        public void subtractCount() // Subtract int Count by 1
+        public void subtractCount() // Mengurangi Count sebanyak 1
         {
             this.Count--;
         }
@@ -59,19 +59,19 @@ namespace Classes
         {
             return this.Count;
         }
-        public Node getFromNode()
+        public Node getFromNode() // Get Node sebelumnya (ketika traversal graf)
         {
             return this.fromNode;
         }
-        public void setFromNode(Node node)
+        public void setFromNode(Node node) // Set Node sebelumnya menjadi node (untuk traversal graf agar bisa traceback)
         {
             this.fromNode = node;
         }
-        public void setFromNodeNull()
+        public void setFromNodeNull() // Set Node sebelumnya Null
         {
             this.fromNode = null;
         }
-        public void addEdge(Node node) // Add connection / edge
+        public void addEdge(Node node) // Menambahkan koneksi/edge ke Node lain
         {
             if (!this.IsConnected(node.getName()) && getName() != node.getName())
             {
@@ -83,17 +83,17 @@ namespace Classes
                 node.SortConnected();
             }
         }
-        public void removeNode(string name) // Remove a node from CNode
+        public void removeNode(string name) // Menghilangkan sebuah node dari list adjacent
         {
             this.CNodes.RemoveAt(findNode(name));
             subtractCount();
         }
-        public void removeConnection(string name) // Remove a connection between nodes
+        public void removeConnection(string name) // Menghilangkan koneksi antar node (menghilangkan dari node ini dengan node dengan Name = name)
         {
             (this.CNodes[findNode(name)]).removeNode(getName());
             removeNode(name);
         }
-        public int findNode (string name) // Returns the index of a node in CNodes (-1) if not found
+        public int findNode (string name) // Mengembalikan index dari node dengan nama = name dalam CNodes (adjacency list), mengembalikan (-1) jika tidak ditemukan
         {
             for (int i = 0; i < this.CNodes.Count; i++)
             {
@@ -104,7 +104,7 @@ namespace Classes
             }
             return -1;
         }
-        public bool IsConnected(string name)
+        public bool IsConnected(string name) // Mengecek koneksi antar dua node, mengembalikan true jika terhubungi, mengembalikan false jika tidak
         {
             foreach (Node node in this.CNodes)
             {
@@ -115,19 +115,19 @@ namespace Classes
             }
             return false;
         }
-        public List<Node> getCNodes()
+        public List<Node> getCNodes() // Mengembalikan Adjacency List (CNodes) dari Node
         {
             return this.CNodes;
         }
-        public void SortConnected()
+        public void SortConnected() // Mengurutkan Adjacency List CNodes berdasarkan atribut string Name, menaik (Karena diutamakan sesuai abjad)
         {
             this.CNodes.Sort((x, y) => x.getName().CompareTo(y.getName()));
         }
-        public void print()
+        public void print() // Meng-output-kan Info dari Node
         {
             Console.WriteLine("Name     : " + this.Name);
             Console.WriteLine("Count    : " + this.Count);
-            Console.Write("Connected: ");
+            Console.Write("Connected: "); // Nama dari Node yang bertetanggaan
             for (int i = 0; i < this.CNodes.Count; i++)
             {
                 if (i != this.CNodes.Count - 1)
@@ -136,11 +136,10 @@ namespace Classes
                 }
                 else
                 {
-                    Console.Write(this.CNodes[i].getName() + ".");
+                    Console.WriteLine(this.CNodes[i].getName() + ".");
                 }
             }
-            Console.WriteLine();
-            Console.Write("Status   : ");
+            Console.Write("Status   : "); // Status sudah dikunjungi atau belum
             if (this.Visited)
             {
                 Console.WriteLine("Visited");
@@ -150,7 +149,7 @@ namespace Classes
                 Console.WriteLine("Unvisited");
             }
             Console.Write("From     : ");
-            if (this.fromNode == null)
+            if (this.fromNode == null) // Jika tidak terdapat penelusuran Node sebelumnya
             {
                 Console.WriteLine("None");
             }
@@ -163,16 +162,39 @@ namespace Classes
     }
     class Graph
     {
-        private List<Node> NodeList;
-        public Graph()
+        private List<Node> NodeList; // List berisi Node yang terdapat pada Graph
+        public Graph() // Default Constructor, membuat Graph kosong yang tidak memiliki node di dalamnya
         {
             this.NodeList = new List<Node>();
         }
-        public void addNode(Node node)
+        public Graph(string filename) // User-defined Constructor, membuat graph dari input soal/permasalahan
         {
-            NodeList.Add(node);
+            this.NodeList = new List<Node>();
+            Console.WriteLine("READING FROM FILE"); // TEST
+            string filenameRead = "../../" + filename; // TEST
+            string line;
+            int lineCount;
+            var readFile = new StreamReader(filenameRead);
+            line = readFile.ReadLine();
+            lineCount = Convert.ToInt32(line); // converting string to int
+            for (int i = 0; i < lineCount; i++)
+            {
+                line = readFile.ReadLine();
+                var vars = line.Split(new[] {' '});
+                this.addConnection(vars[0], vars[1]);
+                Console.WriteLine(line); // TEST
+            }
+            readFile.Close();
         }
-        public Node findNode(string name)
+        public void addNode(Node node) // Menambahkan node pada Graph, jika sudah terdapat node tersebut, tidak ditambahkan
+        {
+            // NodeList.Add(node); // TEST (boleh duplikat?)
+            if (findNode(node.getName()) == null)
+            {
+                 NodeList.Add(node);
+            }
+        }
+        public Node findNode(string name) // Mengembalikan Node node jika terdapat pada Graph, jika tidak akan dikembalikan null
         {
             foreach (Node node in this.NodeList)
             {
@@ -183,7 +205,8 @@ namespace Classes
             }
             return null;
         }
-        public void addConnection(string nodeOne, string nodeTwo)
+        public void addConnection(string nodeOne, string nodeTwo) 
+        // Menambahkan koneksi antar dua node, jika salah satu atau kedua node tersebut belum terdapat pada Graph, node tersebut akan ditambahkan
         {
             if (findNode(nodeOne) == null)
             {
@@ -197,14 +220,18 @@ namespace Classes
             }
             findNode(nodeOne).addEdge(findNode(nodeTwo));
         }
-        public void print()
+        public void print() // Meng-output-kan informasi tiap Node yang terdapat pada Graph
         {
             foreach (Node node in NodeList)
             {
                 node.print();
             }
         }
-        public List<string> BFS(string from, string to)
+        public List<string> BFS(string from, string to) // Mengembalikan List of string hasil penelusuran BFS dari suatu Node ke Node lainnya, jika tidak terdapat koneksi, dikembalikan null
+        // Algoritma BFS bekerja dengan iteratif, dimulai dari Node from
+        // Dari Node from, menelusuri seluruh tetangga terlebih dahulu (alphabetically) kemudian menlanjutkan menelusuri tetangga dari hasil telusuran tersebut
+        // Bekerja dengan membuat sebuah Queue (First In First Out), jika telah dikunjungi, Node ditambahkan ke bagian akhir list, dan melanjutkan penelusuran Node dari Queue paling depan
+        // Tiap iterasi (Jika Node paling depan Queue telah dikunjungi seluruh tetangganya), Node tersebut di-remove dari Queue, kemudian dilanjutkan untuk Node berikutnya
         {
             List<Node> list = new List<Node>();
             if (findNode(from) == null || findNode(to) == null || from == to)
@@ -251,23 +278,7 @@ namespace Classes
             setAllUnvisited();
             return null; // Mungkin kasus gaketemu destination?? TEST
         }
-        /*
-        private void DFS2(Node node, string from)
-        {
-            Console.WriteLine("Visiting " + node.getName());
-            node.setVisited();
-            foreach (var dfsnode in node.getCNodes())
-            {
-                if (!dfsnode.getStatus() && dfsnode.getName() != from)
-                {
-                    dfsnode.setFromNode(node);
-                    dfsnode.setVisited();
-                    DFS2(dfsnode, from);
-                }
-            }
-        }
-        */
-        public void DFSrec(Node node, string from)
+        public void DFSrec(Node node, string from) // Menelusuri Graph secara DFS (rekursif), dimulai dari Node dengan Name = from
         {
             Console.WriteLine("Visiting " + node.getName()); // TEST
             node.setVisited();
@@ -281,9 +292,11 @@ namespace Classes
                 }
             }
         }
-        public List<string> DFS(string from, string to)
+        public List<string> DFS(string from, string to) // Mengembalikan hasil penelusuran (jalur) Graph secara DFS, dimulai dari Node from hingga Node to
+        // DFS bekerja dengan rekursif, dimulai dari Node from
+        // Dari Node from, ditelusuri Node bertetangga (alphabetically) dan menelusuri Node tersebut lagi sebelum menelusuri Node bertetangga lainnya
         {
-            if (findNode(from) == null || findNode(to) == null || from == to)
+            if (findNode(from) == null || findNode(to) == null || from == to) // Kasus jika Node from atau Node to tidak terdapat pada Graph
             {
                 return null;
                 // return null;
@@ -311,7 +324,7 @@ namespace Classes
                 return null;
             }
         }
-        public List<Tuple<string, int, List<string>>> getMutuals(string name)
+        public List<Tuple<string, int, List<string>>> getMutuals(string name) // Mengembalikan Mutual Friend dari sebuah Node
         {
             List<string> listNames = new List<string>();
             List<int> listMutualCount = new List<int>();
@@ -351,23 +364,75 @@ namespace Classes
             list.Sort((a, b) => b.Item2.CompareTo(a.Item2));
             return list;
         }
-        public void removeEdge(string from, string to)
+        public void removeEdge(string from, string to) // Menghilangkan koneksi antar Node pada Graph (from dan to harus terdapat pada Graph) TEST
         {
             findNode(from).removeConnection(to);
         }
-        public void setAllUnvisited()
+        public void setAllUnvisited() // Set setiap Node pada Graph menjadi Unvisited (Visited = false) (reset untuk traversal berikutnya)
         {
             foreach (Node node in NodeList)
             {
                 node.setUnvisited();
             }
         }
-        public void setAllFNNull()
+        public void setAllFNNull() // Set setiap Node pada Graph agar memiliki FromNode = null (reset untuk traversal berikutnya)
         {
             foreach (Node node in NodeList)
             {
                 node.setFromNodeNull();
             }
+        }
+        private void PrintAll(List<string> list) // Method Private untuk meng-output hasil traversal (BFS/DFS) TEST (mungkin ditambahkan getter sebagai sebuah string)
+        {
+            if (list == null)
+            {
+                Console.WriteLine("Tidak terdapat jalan"); // TEST mungkin tambah parameter from, to
+                return;
+            }
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (i != list.Count - 1)
+                {
+                    Console.Write(list[i] + " --> ");
+                }
+                else
+                {
+                    Console.WriteLine(list[i] + ".");
+                }
+            }
+        }
+        private void PrintMutuals(List<Tuple<string, int, List<string>>> list) // Method Private untuk meng-output Mutual Friend sebuah Node (mungkin ditambahkan getter sebagai sebuah string)
+        {
+            foreach (var tuple in list) // Mutual friends
+            {
+                Console.WriteLine("Node : " + tuple.Item1);
+                Console.WriteLine("Count: " + tuple.Item2);
+                Console.Write("Nodes: ");
+                for (int i = 0; i < tuple.Item3.Count; i++)
+                {
+                    if (i != tuple.Item3.Count - 1)
+                    {
+                        Console.Write(tuple.Item3[i] + ", ");
+                    }
+                    else
+                    {
+                        Console.WriteLine(tuple.Item3[i] + ".");
+                    }
+                }
+                Console.WriteLine(":-----:"); // TEST
+            }
+        }
+        public void WritePathBFS(string from, string to) // Method public untuk meng-output hasil traversal menggunakan algoritma BFS dari Node from hingga Node to
+        {
+            PrintAll(BFS(from, to));
+        }
+        public void WritePathDFS(string from, string to) // Method public untuk meng-output hasil traversal menggunakan algoritma DFS dari Node from hingga Node to
+        {
+            PrintAll(DFS(from, to));
+        }
+        public void WriteMutuals(string source) // Method public untuk meng-output hasil penemuan mutual friend dari Node source
+        {
+            PrintMutuals(getMutuals(source));
         }
     }
 
@@ -575,6 +640,12 @@ namespace Classes
             PrintAll(fileGraph.BFS("A", "H"));
             Console.WriteLine("DFS");
             PrintAll(fileGraph.DFS("A", "H"));
+
+            // Ways to use the class to print
+            Graph testRead = new Graph("test.txt");
+            testRead.WriteMutuals("A");
+            testRead.WritePathBFS("A", "H");
+            testRead.WritePathDFS("A", "H");
 
             Console.ReadLine();
         }

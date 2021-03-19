@@ -25,7 +25,7 @@ namespace SocialNetworkApp
         }
         private Classes.Graph OG;
         private Microsoft.Msagl.Drawing.Graph GDraw;
-        private Microsoft.Msagl.Drawing.Graph GDrawBase; // the base for the file, to reset after each findings
+        // private Microsoft.Msagl.Drawing.Graph GDrawBase; // the base for the file, to reset after each findings
         private string account;
         private string findAccount;
         private List<ItemCombo> accList;
@@ -170,6 +170,7 @@ namespace SocialNetworkApp
                 {
                     EditNodePath(graphs, list[i + 1]);
                 }
+                gdi.Graph = graphs;
                 Wait(2500); // menunggu 2.5 detik
             }
         }
@@ -194,6 +195,7 @@ namespace SocialNetworkApp
             cmb_Account.Visible = false;
             pnl_ExploreFriends.Visible = false;
             cmb_ExploreWith.Visible = false;
+            pnl_ExploreFriends.Size = new Size(200, 181);
         }
 
         private void gViewer1_Load(object sender, EventArgs e)
@@ -212,6 +214,9 @@ namespace SocialNetworkApp
                 this.OG = new Classes.Graph(fileToOpen);
                 DrawGraph(this.GDraw, OG.getDrawInfo());
                 gViewer1.Graph = this.GDraw;
+                this.account = null;
+                this.findAccount = null;
+                this.mode = -1;
 
                 // Initialize dropdown menu
                 accList = new List<ItemCombo>();
@@ -277,7 +282,81 @@ namespace SocialNetworkApp
 
         private void btn_FriendAccount_Click(object sender, EventArgs e)
         {
+            if (cmb_ExploreWith.Visible)
+            {
+                pnl_ExploreFriends.Size = new Size(200, 181);
+            }
+            else
+            {
+                pnl_ExploreFriends.Size = new Size(200, 202);
+            }
             cmb_ExploreWith.Visible = !cmb_ExploreWith.Visible;
+        }
+
+        private void btn_BFS_Click(object sender, EventArgs e)
+        {
+            if (this.mode == 1) return;
+            this.mode = 1;
+            // Mengganti warna tombol BFS
+            btn_BFS.ForeColor = Color.FromArgb(255, 40, 42, 54);
+            btn_BFS.BackColor = Color.FromArgb(255, 255, 121, 198);
+            // Mengganti warna tombol DFS
+            btn_DFS.ForeColor = Color.FromArgb(255, 255, 121, 198);
+            btn_DFS.BackColor = Color.FromArgb(255, 40, 42, 54);
+        }
+
+        private void btn_DFS_Click(object sender, EventArgs e)
+        {
+            if (this.mode == 0) return;
+            this.mode = 0;
+            // Mengganti warna tombol DFS
+            btn_DFS.ForeColor = Color.FromArgb(255, 40, 42, 54);
+            btn_DFS.BackColor = Color.FromArgb(255, 255, 121, 198);
+            // Mengganti warna tombol BFS
+            btn_BFS.ForeColor = Color.FromArgb(255, 255, 121, 198);
+            btn_BFS.BackColor = Color.FromArgb(255, 40, 42, 54);
+        }
+
+        private void btn_Explore_Click(object sender, EventArgs e)
+        {
+            if (this.mode == -1) return;
+            if (this.account == null) return;
+            if (this.findAccount == null) return;
+            if (this.account == this.findAccount) return;
+            if (this.mode == 1)
+            {
+                var BFSpath = OG.BFS(this.account, this.findAccount);
+                AnimatePath(this.GDraw, BFSpath, this.gViewer1);
+                return;
+            }
+            if (this.mode == 0)
+            {
+                var DFSpath = OG.DFS(this.account, this.findAccount);
+                AnimatePath(this.GDraw, DFSpath, this.gViewer1);
+                return;
+            }
+        }
+
+        private void btn_Reset_Click(object sender, EventArgs e)
+        {
+            this.GDraw = new Microsoft.Msagl.Drawing.Graph("graph");
+            DrawGraph(this.GDraw, OG.getDrawInfo());
+            gViewer1.Graph = this.GDraw;
+            this.account = null;
+            this.findAccount = null;
+            this.mode = -1;
+        }
+
+        private void btn_Mutual_Click(object sender, EventArgs e)
+        {
+            if (this.account == null) return;
+            var mutualList = OG.getMutuals(this.account);
+            if (mutualList.Count == 0) return;
+            foreach (var mutual in mutualList)
+            {
+                EditNodeAccount(this.GDraw, mutual.Item1);
+            }
+            gViewer1.Graph = this.GDraw;
         }
     }
 }

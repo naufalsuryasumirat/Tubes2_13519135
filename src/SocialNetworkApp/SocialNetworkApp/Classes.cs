@@ -191,6 +191,15 @@ namespace Classes
             }
             readFile.Close();
         }
+        public List<string> getNodeNames()
+        {
+            var names = new List<string>();
+            foreach (var node in this.NodeList)
+            {
+                names.Add(node.getName());
+            }
+            return names;
+        }
         public List<Tuple<string, string>> getDrawInfo() // Get DrawInfo
         {
             return this.DrawInfo;

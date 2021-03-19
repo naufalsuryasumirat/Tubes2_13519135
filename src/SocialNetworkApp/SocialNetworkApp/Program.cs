@@ -20,8 +20,8 @@ namespace SocialNetworkApp
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1());
             Form myform = new Form1();
-            myform.FormBorderStyle = FormBorderStyle.None;
-            myform.WindowState = FormWindowState.Maximized;
+            // myform.FormBorderStyle = FormBorderStyle.None;
+            // myform.WindowState = FormWindowState.Maximized;
             Application.Run(myform);
         }
     }

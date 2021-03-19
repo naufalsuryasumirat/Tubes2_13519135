@@ -13,6 +13,24 @@ namespace SocialNetworkApp
 {
     public partial class Form1 : Form
     {
+        class ItemCombo
+        {
+            public ItemCombo() { }
+            public string Value { set; get; }
+            public string Text { set; get; }
+            public override string ToString()
+            {
+                return Value;
+            }
+        }
+        private Classes.Graph OG;
+        private Microsoft.Msagl.Drawing.Graph GDraw;
+        private Microsoft.Msagl.Drawing.Graph GDrawBase; // the base for the file, to reset after each findings
+        private string account;
+        private string findAccount;
+        private List<ItemCombo> accList;
+        private List<ItemCombo> findList;
+        private int mode; // 1 for BFS, 0 for DFS, -1 for not selected
         void AddUndirectedEdge(Microsoft.Msagl.Drawing.Graph graphs, string source, string target, string color)
         {
             var Edge = graphs.AddEdge(source, target);
@@ -86,11 +104,48 @@ namespace SocialNetworkApp
                 Node.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Circle;
             }
         }
-        void EditNode(Microsoft.Msagl.Drawing.Graph graphs, string name, string color, string shape)
+        void EditNodePath(Microsoft.Msagl.Drawing.Graph graphs, string name)
         {
             Microsoft.Msagl.Drawing.Node find = graphs.FindNode(name);
             find.Attr.FillColor = Microsoft.Msagl.Drawing.Color.Yellow;
             find.Attr.Shape = Microsoft.Msagl.Drawing.Shape.DoubleCircle;
+        }
+        void EditNodeNormal(Microsoft.Msagl.Drawing.Graph graphs, string name)
+        {
+            Microsoft.Msagl.Drawing.Node find = graphs.FindNode(name);
+            find.Attr.FillColor = Microsoft.Msagl.Drawing.Color.White;
+            find.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Circle;
+        }
+        void EditNodeAccount(Microsoft.Msagl.Drawing.Graph graphs, string name)
+        {
+            Microsoft.Msagl.Drawing.Node find = graphs.FindNode(name);
+            find.Attr.FillColor = Microsoft.Msagl.Drawing.Color.Yellow;
+            find.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Circle;
+        }
+        void EditNodeFind(Microsoft.Msagl.Drawing.Graph graphs, string name)
+        {
+            Microsoft.Msagl.Drawing.Node find = graphs.FindNode(name);
+            find.Attr.FillColor = Microsoft.Msagl.Drawing.Color.Red;
+            find.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Circle;
+        }
+        void Wait(int ms) // Timer untuk animasi
+        {
+            var timer = new System.Windows.Forms.Timer();
+            if (ms <= 0) return;
+            timer.Interval = ms;
+            timer.Enabled = true;
+            timer.Start();
+
+            timer.Tick += (s, e) =>
+            {
+                timer.Enabled = false;
+                timer.Stop();
+            };
+
+            while (timer.Enabled == true)
+            {
+                Application.DoEvents();
+            }
         }
         // Pastikan terdapat path terlebih dahulu
         void DrawPath(Microsoft.Msagl.Drawing.Graph graphs, List<string> list)
@@ -98,11 +153,24 @@ namespace SocialNetworkApp
             for (int i = 0; i < list.Count - 1; i++)
             {
                 AddDirectedEdge(graphs, list[i], list[i + 1], "Blue");
-                EditNode(graphs, list[i], "Yellow", "DCircle");
+                EditNodePath(graphs, list[i]);
                 if (i == list.Count - 2)
                 {
-                    EditNode(graphs, list[i + 1], "Yellow", "DCircle");
+                    EditNodePath(graphs, list[i + 1]);
                 }
+            }
+        }
+        void AnimatePath(Microsoft.Msagl.Drawing.Graph graphs, List<string> list, Microsoft.Msagl.GraphViewerGdi.GViewer gdi)
+        {
+            for (int i = 0; i < list.Count - 1; i++)
+            {
+                AddDirectedEdge(graphs, list[i], list[i + 1], "Blue");
+                EditNodePath(graphs, list[i]);
+                if (i == list.Count - 2)
+                {
+                    EditNodePath(graphs, list[i + 1]);
+                }
+                Wait(2500); // menunggu 2.5 detik
             }
         }
         void DrawGraph(Microsoft.Msagl.Drawing.Graph graphs, List<Tuple<string, string>> list)
@@ -110,19 +178,22 @@ namespace SocialNetworkApp
             foreach (var tuple in list)
             {
                 AddUndirectedEdge(graphs, tuple.Item1, tuple.Item2, "Black");
+                EditNodeNormal(graphs, tuple.Item1);
+                EditNodeNormal(graphs, tuple.Item2);
             }
         }
         public Form1()
         {
             InitializeComponent();
             //this.gViewer1 = new Microsoft.Msagl.GraphViewerGdi.GViewer();
-            Microsoft.Msagl.Drawing.Graph graph = new Microsoft.Msagl.Drawing.Graph("graph");
-            Classes.Graph testImport = new Classes.Graph("../../test/test.txt");
-            DrawGraph(graph, testImport.getDrawInfo());
-            var listDFS = testImport.DFS("A", "H");
-            var listBFS = testImport.BFS("A", "H");
-            DrawPath(graph, listDFS);
-            gViewer1.Graph = graph;
+            this.GDraw = null;
+            this.OG = null;
+            this.account = null;
+            this.findAccount = null;
+            this.mode = -1;
+            cmb_Account.Visible = false;
+            pnl_ExploreFriends.Visible = false;
+            cmb_ExploreWith.Visible = false;
         }
 
         private void gViewer1_Load(object sender, EventArgs e)
@@ -137,18 +208,76 @@ namespace SocialNetworkApp
             {
                 string fileToOpen = result.FileName;
                 Console.WriteLine(fileToOpen);
-                Microsoft.Msagl.Drawing.Graph graph = new Microsoft.Msagl.Drawing.Graph("graph");
-                Classes.Graph testImport = new Classes.Graph(fileToOpen);
-                DrawGraph(graph, testImport.getDrawInfo());
-                var listBFS = testImport.BFS("A", "H");
-                DrawPath(graph, listBFS);
-                gViewer1.Graph = graph;
+                this.GDraw = new Microsoft.Msagl.Drawing.Graph("graph");
+                this.OG = new Classes.Graph(fileToOpen);
+                DrawGraph(this.GDraw, OG.getDrawInfo());
+                gViewer1.Graph = this.GDraw;
+
+                // Initialize dropdown menu
+                accList = new List<ItemCombo>();
+                findList = new List<ItemCombo>();
+                foreach (var name in OG.getNodeNames())
+                {
+                    accList.Add(new ItemCombo() { Text = name, Value = name });
+                    findList.Add(new ItemCombo() { Text = name, Value = name });
+                }
+                cmb_Account.DataSource = accList;
+                cmb_Account.DisplayMember = "Text";
+                cmb_Account.ValueMember = "Value";
+
+                cmb_ExploreWith.DataSource = findList;
+                cmb_ExploreWith.DisplayMember = "Text";
+                cmb_ExploreWith.ValueMember = "Value";
             }
         }
 
         private void btn_exit_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btn_Minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void cmb_Account_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (account != null)
+            {
+                EditNodeNormal(this.GDraw, this.account);
+                gViewer1.Graph = GDraw;
+            }
+            this.account = cmb_Account.SelectedValue.ToString();
+            EditNodeAccount(this.GDraw, this.account);
+            gViewer1.Graph = GDraw;
+        }
+
+        private void btn_Account_Click(object sender, EventArgs e)
+        {
+            cmb_Account.Visible = !cmb_Account.Visible;
+        }
+
+        private void btn_ExploreFriends_Click(object sender, EventArgs e)
+        {
+            pnl_ExploreFriends.Visible = !pnl_ExploreFriends.Visible;
+        }
+
+        private void cmb_ExploreWith_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (findAccount != null)
+            {
+                EditNodeNormal(this.GDraw, this.findAccount);
+                gViewer1.Graph = GDraw;
+            }
+            this.findAccount = cmb_ExploreWith.SelectedValue.ToString();
+            EditNodeFind(this.GDraw, this.findAccount);
+            gViewer1.Graph = GDraw;
+        }
+
+        private void btn_FriendAccount_Click(object sender, EventArgs e)
+        {
+            cmb_ExploreWith.Visible = !cmb_ExploreWith.Visible;
         }
     }
 }

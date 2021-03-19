@@ -171,7 +171,7 @@ namespace SocialNetworkApp
                     EditNodePath(graphs, list[i + 1]);
                 }
                 gdi.Graph = graphs;
-                Wait(2500); // menunggu 2.5 detik
+                Wait(1250); // menunggu 2.5 detik
             }
         }
         void DrawGraph(Microsoft.Msagl.Drawing.Graph graphs, List<Tuple<string, string>> list)
@@ -217,6 +217,7 @@ namespace SocialNetworkApp
                 this.account = null;
                 this.findAccount = null;
                 this.mode = -1;
+                lbl_FileName.Text = "File Name: " + System.IO.Path.GetFileName(fileToOpen);
 
                 // Initialize dropdown menu
                 accList = new List<ItemCombo>();
@@ -327,12 +328,14 @@ namespace SocialNetworkApp
             {
                 var BFSpath = OG.BFS(this.account, this.findAccount);
                 AnimatePath(this.GDraw, BFSpath, this.gViewer1);
+                lbl_Content.Text = "Penelusuran dengan Breadth-First Search\n" + OG.getPrintAll(BFSpath);
                 return;
             }
             if (this.mode == 0)
             {
                 var DFSpath = OG.DFS(this.account, this.findAccount);
                 AnimatePath(this.GDraw, DFSpath, this.gViewer1);
+                lbl_Content.Text = "Penelusuran dengan Depth-First Search\n" + OG.getPrintAll(DFSpath);
                 return;
             }
         }
@@ -345,6 +348,7 @@ namespace SocialNetworkApp
             this.account = null;
             this.findAccount = null;
             this.mode = -1;
+            lbl_Content.Text = "";
         }
 
         private void btn_Mutual_Click(object sender, EventArgs e)
@@ -357,6 +361,7 @@ namespace SocialNetworkApp
                 EditNodeAccount(this.GDraw, mutual.Item1);
             }
             gViewer1.Graph = this.GDraw;
+            lbl_Content.Text = OG.getPrintMutuals(this.account);
         }
     }
 }

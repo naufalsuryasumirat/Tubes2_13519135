@@ -51,10 +51,13 @@ namespace SocialNetworkApp
             this.pnl_Main = new System.Windows.Forms.Panel();
             this.pnl_Filename = new System.Windows.Forms.Panel();
             this.btn_Mutual = new System.Windows.Forms.Button();
+            this.lbl_FileName = new System.Windows.Forms.Label();
+            this.lbl_Content = new System.Windows.Forms.Label();
             this.pnl_SideMenu.SuspendLayout();
             this.pnl_ExploreFriends.SuspendLayout();
             this.pnl_Logo.SuspendLayout();
             this.pnl_Main.SuspendLayout();
+            this.pnl_Filename.SuspendLayout();
             this.SuspendLayout();
             // 
             // gViewer1
@@ -330,7 +333,7 @@ namespace SocialNetworkApp
             this.lbl_Logo.Name = "lbl_Logo";
             this.lbl_Logo.Size = new System.Drawing.Size(200, 66);
             this.lbl_Logo.TabIndex = 0;
-            this.lbl_Logo.Text = "SNSbook";
+            this.lbl_Logo.Text = "YO space";
             this.lbl_Logo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pnl_Bottom
@@ -345,6 +348,7 @@ namespace SocialNetworkApp
             // pnl_Main
             // 
             this.pnl_Main.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(42)))), ((int)(((byte)(54)))));
+            this.pnl_Main.Controls.Add(this.lbl_Content);
             this.pnl_Main.Controls.Add(this.gViewer1);
             this.pnl_Main.Controls.Add(this.pnl_Filename);
             this.pnl_Main.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -356,6 +360,7 @@ namespace SocialNetworkApp
             // pnl_Filename
             // 
             this.pnl_Filename.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(71)))), ((int)(((byte)(90)))));
+            this.pnl_Filename.Controls.Add(this.lbl_FileName);
             this.pnl_Filename.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnl_Filename.Location = new System.Drawing.Point(0, 0);
             this.pnl_Filename.Name = "pnl_Filename";
@@ -379,6 +384,26 @@ namespace SocialNetworkApp
             this.btn_Mutual.UseVisualStyleBackColor = false;
             this.btn_Mutual.Click += new System.EventHandler(this.btn_Mutual_Click);
             // 
+            // lbl_FileName
+            // 
+            this.lbl_FileName.Font = new System.Drawing.Font("LEMON MILK", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_FileName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(121)))), ((int)(((byte)(198)))));
+            this.lbl_FileName.Location = new System.Drawing.Point(19, 9);
+            this.lbl_FileName.Name = "lbl_FileName";
+            this.lbl_FileName.Size = new System.Drawing.Size(992, 45);
+            this.lbl_FileName.TabIndex = 0;
+            this.lbl_FileName.Text = "File Name: ";
+            this.lbl_FileName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lbl_Content
+            // 
+            this.lbl_Content.Font = new System.Drawing.Font("LEMON MILK", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_Content.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(121)))), ((int)(((byte)(198)))));
+            this.lbl_Content.Location = new System.Drawing.Point(78, 133);
+            this.lbl_Content.Name = "lbl_Content";
+            this.lbl_Content.Size = new System.Drawing.Size(823, 752);
+            this.lbl_Content.TabIndex = 2;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -397,6 +422,7 @@ namespace SocialNetworkApp
             this.pnl_ExploreFriends.ResumeLayout(false);
             this.pnl_Logo.ResumeLayout(false);
             this.pnl_Main.ResumeLayout(false);
+            this.pnl_Filename.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -423,6 +449,8 @@ namespace SocialNetworkApp
         private System.Windows.Forms.Button btn_Explore;
         private System.Windows.Forms.Button btn_Reset;
         private System.Windows.Forms.Button btn_Mutual;
+        private System.Windows.Forms.Label lbl_FileName;
+        private System.Windows.Forms.Label lbl_Content;
     }
 }
 

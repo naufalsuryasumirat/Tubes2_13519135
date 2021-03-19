@@ -419,6 +419,29 @@ namespace Classes
                 }
             }
         }
+        public string getPrintAll(List<string> list)
+        {
+            string toReturn = "Nama Akun: " + list[0] + " dan " + list[list.Count - 1] + "\n";
+            if (list == null) return "Tidak terdapat jalan";
+            if (list.Count - 2 == 0) { toReturn += "Direct Connection\n"; }
+            else if (list.Count - 2 == 1) { toReturn += "1st Degree Connection\n"; }
+            else if (list.Count - 2 == 2) { toReturn += "2nd Degree Connection\n"; }
+            else if (list.Count - 2 == 3) { toReturn += "3rd Degree Connection\n"; }
+            else if (list.Count - 2 > 3) { toReturn += (list.Count - 2).ToString() + "th Degree Connection\n"; }
+            toReturn += "Jalur yang terbentuk: ";
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (i != list.Count - 1)
+                {
+                    toReturn += list[i] + " --> ";
+                }
+                else
+                {
+                    toReturn += list[i] + ".\n";
+                }
+            }
+            return toReturn;
+        }
         private void PrintMutuals(List<Tuple<string, int, List<string>>> list) // Method Private untuk meng-output Mutual Friend sebuah Node (mungkin ditambahkan getter sebagai sebuah string)
         {
             foreach (var tuple in list) // Mutual friends
@@ -439,6 +462,30 @@ namespace Classes
                 }
                 Console.WriteLine(":-----:"); // TEST
             }
+        }
+        public string getPrintMutuals(string name)
+        {
+            var list = getMutuals(name);
+            if (list.Count == 0) return "Tidak ada rekomendasi teman untuk akun " + name + "\n";
+            string toReturn = "";
+            toReturn += "Daftar rekomendasi teman untuk akun " + name + "\n";
+            foreach (var tuple in list)
+            {
+                toReturn += "Nama Akun : " + tuple.Item1 + "\n";
+                toReturn += tuple.Item2 + " Mutual Friends : ";
+                for (int i = 0; i < tuple.Item3.Count; i++)
+                {
+                    if (i != tuple.Item3.Count - 1)
+                    {
+                        toReturn += tuple.Item3[i] + ", ";
+                    }
+                    else
+                    {
+                        toReturn += tuple.Item3[i] + ".\n";
+                    }
+                }
+            }
+            return toReturn;
         }
         public void WritePathBFS(string from, string to) // Method public untuk meng-output hasil traversal menggunakan algoritma BFS dari Node from hingga Node to
         {

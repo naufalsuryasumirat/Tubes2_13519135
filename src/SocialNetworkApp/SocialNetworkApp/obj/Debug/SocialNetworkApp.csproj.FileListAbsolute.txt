@@ -1,0 +1,17 @@
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\bin\Debug\SocialNetworkApp.exe.config
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\bin\Debug\SocialNetworkApp.exe
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\bin\Debug\SocialNetworkApp.pdb
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\bin\Debug\Microsoft.Msagl.dll
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\bin\Debug\Microsoft.Msagl.Drawing.dll
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\bin\Debug\Microsoft.Msagl.GraphViewerGdi.dll
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\bin\Debug\Microsoft.Msagl.xml
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\bin\Debug\Microsoft.Msagl.Drawing.xml
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\bin\Debug\Microsoft.Msagl.GraphViewerGdi.xml
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\obj\Debug\SocialNetworkApp.csprojAssemblyReference.cache
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\obj\Debug\SocialNetworkApp.Form1.resources
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\obj\Debug\SocialNetworkApp.Properties.Resources.resources
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\obj\Debug\SocialNetworkApp.csproj.GenerateResource.cache
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\obj\Debug\SocialNetworkApp.csproj.CoreCompileInputs.cache
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\obj\Debug\SocialNetworkApp.csproj.CopyComplete
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\obj\Debug\SocialNetworkApp.exe
+C:\Users\Noler\Git\Tubes2_13519135\src\SocialNetworkApp\SocialNetworkApp\obj\Debug\SocialNetworkApp.pdb

@@ -185,13 +185,13 @@ namespace Classes
             {
                 line = readFile.ReadLine();
                 var vars = line.Split(new[] {' '});
-                this.addConnection(vars[0], vars[1]);
                 DrawInfo.Add(Tuple.Create(vars[0], vars[1])); // Menaruh informasi pada DrawInfo untuk digambar
+                this.addConnection(vars[0], vars[1]);
                 Console.WriteLine(line); // TEST
             }
             readFile.Close();
         }
-        public List<string> getNodeNames()
+        public List<string> getNodeNames() // Get list dari nama node yang terdapat pada graph
         {
             var names = new List<string>();
             foreach (var node in this.NodeList)
@@ -200,16 +200,16 @@ namespace Classes
             }
             return names;
         }
-        public List<Tuple<string, string>> getDrawInfo() // Get DrawInfo
+        public List<Tuple<string, string>> getDrawInfo() // Get DrawInfo untuk menggambar graph menggunakan MSAGL
         {
             return this.DrawInfo;
         }
         public void addNode(Node node) // Menambahkan node pada Graph, jika sudah terdapat node tersebut, tidak ditambahkan
         {
-            // NodeList.Add(node); // TEST (boleh duplikat?)
             if (findNode(node.getName()) == null)
             {
-                 NodeList.Add(node);
+                NodeList.Add(node);
+                this.DrawInfo.Add(new Tuple<string, string>(node.getName(), null));
             }
         }
         public Node findNode(string name) // Mengembalikan Node node jika terdapat pada Graph, jika tidak akan dikembalikan null
@@ -236,6 +236,9 @@ namespace Classes
                 Node newNode = new Node(nodeTwo);
                 addNode(newNode);
             }
+            var t1 = new Tuple<string, string>(nodeOne, nodeTwo);
+            var t2 = new Tuple<string, string>(nodeTwo, nodeOne);
+            if (!this.DrawInfo.Contains(t1) && !this.DrawInfo.Contains(t2)) { this.DrawInfo.Add(t1); }
             findNode(nodeOne).addEdge(findNode(nodeTwo));
         }
         public void print() // Meng-output-kan informasi tiap Node yang terdapat pada Graph

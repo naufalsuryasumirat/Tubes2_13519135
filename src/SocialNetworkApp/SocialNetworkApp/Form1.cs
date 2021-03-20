@@ -30,7 +30,11 @@ namespace SocialNetworkApp
         private string findAccount; // Akun yang dituju explore friends
         private List<ItemCombo> accList; // List akun untuk pilihan Akun saat ini
         private List<ItemCombo> findList; // List akun untuk pilihan Find Friend
+        private List<ItemCombo> fromList; // List akun untuk pilihan From Connection
+        private List<ItemCombo> toList; // List akun untuk pilihan To Connection
         private int mode; // 1 for BFS, 0 for DFS, -1 for not selected
+        private string from; // Akun from (penambahan koneksi)
+        private string to; // Akun to (penambahan koneksi)
         void AddUndirectedEdge(Microsoft.Msagl.Drawing.Graph graphs, string source, string target, string color) // Menambah dan Menggambarkan jalur / edge tidak berarah
         {
             var Edge = graphs.AddEdge(source, target);
@@ -128,6 +132,12 @@ namespace SocialNetworkApp
             find.Attr.FillColor = Microsoft.Msagl.Drawing.Color.Red;
             find.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Circle;
         }
+        void EditNodeConnection(Microsoft.Msagl.Drawing.Graph graphs, string name) // Mengubah atribut sebuah simpul untuk menunjukkan menambahkan koneksi
+        {
+            Microsoft.Msagl.Drawing.Node find = graphs.FindNode(name);
+            find.Attr.FillColor = Microsoft.Msagl.Drawing.Color.LightGreen;
+            find.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Circle;
+        }
         void Wait(int ms) // Timer / Wait untuk animasi jalur pencarian teman (explore friends) // Pastikan terdapat path terlebih dahulu untuk parameter
         {
             var timer = new System.Windows.Forms.Timer();
@@ -177,10 +187,36 @@ namespace SocialNetworkApp
         {
             foreach (var tuple in list)
             {
+                if (tuple.Item2 == null) { AddNode(graphs, tuple.Item1, "white", "circle"); continue; }
                 AddUndirectedEdge(graphs, tuple.Item1, tuple.Item2, "Black");
                 EditNodeNormal(graphs, tuple.Item1);
                 EditNodeNormal(graphs, tuple.Item2);
             }
+        }
+        void InitializeComboItems(List<ItemCombo> list1, List<ItemCombo> list2, List<ItemCombo> list3, List<ItemCombo> list4, Classes.Graph graph)
+        {
+            foreach (var name in graph.getNodeNames())
+            {
+                list1.Add(new ItemCombo() { Text = name, Value = name });
+                list2.Add(new ItemCombo() { Text = name, Value = name });
+                list3.Add(new ItemCombo() { Text = name, Value = name });
+                list4.Add(new ItemCombo() { Text = name, Value = name });
+            }
+            cmb_Account.DataSource = list1;
+            cmb_Account.DisplayMember = "Text";
+            cmb_Account.ValueMember = "Value";
+
+            cmb_ExploreWith.DataSource = list2;
+            cmb_ExploreWith.DisplayMember = "Text";
+            cmb_ExploreWith.ValueMember = "Value";
+
+            cmb_From.DataSource = list3;
+            cmb_From.DisplayMember = "Text";
+            cmb_From.ValueMember = "Value";
+
+            cmb_To.DataSource = list4;
+            cmb_To.DisplayMember = "Text";
+            cmb_To.ValueMember = "Value";
         }
         public Form1() // Konstruktor form (Menginisialisasikan tiap atribut dengan null, dan beberapa komponen tidak dapat dilihat terlebih dahulu pada form)
         {
@@ -191,10 +227,14 @@ namespace SocialNetworkApp
             this.account = null;
             this.findAccount = null;
             this.mode = -1;
+            this.from = null;
+            this.to = null;
             cmb_Account.Visible = false;
             pnl_ExploreFriends.Visible = false;
             cmb_ExploreWith.Visible = false;
             pnl_ExploreFriends.Size = new Size(200, 181);
+            pnl_AddAccount.Visible = false;
+            pnl_AddConnection.Visible = false;
         }
 
         private void gViewer1_Load(object sender, EventArgs e)
@@ -221,18 +261,9 @@ namespace SocialNetworkApp
                 // Initialize dropdown menu
                 accList = new List<ItemCombo>();
                 findList = new List<ItemCombo>();
-                foreach (var name in OG.getNodeNames())
-                {
-                    accList.Add(new ItemCombo() { Text = name, Value = name });
-                    findList.Add(new ItemCombo() { Text = name, Value = name });
-                }
-                cmb_Account.DataSource = accList;
-                cmb_Account.DisplayMember = "Text";
-                cmb_Account.ValueMember = "Value";
-
-                cmb_ExploreWith.DataSource = findList;
-                cmb_ExploreWith.DisplayMember = "Text";
-                cmb_ExploreWith.ValueMember = "Value";
+                fromList = new List<ItemCombo>();
+                toList = new List<ItemCombo>();
+                InitializeComboItems(accList, findList, fromList, toList, OG);
             }
         }
 
@@ -344,12 +375,15 @@ namespace SocialNetworkApp
 
         private void btn_Reset_Click(object sender, EventArgs e) // Reset graph untuk menghilangkan path sebelumnya (mengembalikan ke state awal di load)
         {
+            if (this.OG == null || this.GDraw == null) return;
             this.GDraw = new Microsoft.Msagl.Drawing.Graph("graph");
             DrawGraph(this.GDraw, OG.getDrawInfo());
             gViewer1.Graph = this.GDraw;
             this.account = null;
             this.findAccount = null;
             this.mode = -1;
+            this.from = null;
+            this.to = null;
             lbl_Content.Text = "";
         }
 
@@ -364,6 +398,70 @@ namespace SocialNetworkApp
             }
             gViewer1.Graph = this.GDraw;
             lbl_Content.Text = OG.getPrintMutuals(this.account);
+        }
+
+        private void btn_AddAccount_Click(object sender, EventArgs e)
+        {
+            pnl_AddAccount.Visible = !pnl_AddAccount.Visible;
+        }
+
+        private void btn_Add_Click(object sender, EventArgs e)
+        {
+            if (rtb_AccName.Text.Length == 0) return;
+            if (this.OG == null || this.GDraw == null) return;
+            var toAdd = rtb_AccName.Text;
+            if (this.OG.findNode(toAdd) != null) { lbl_Content.Text = "Akun dengan nama " + toAdd + " sudah terdapat pada Graph."; return; }
+            
+            OG.addNode(new Node(toAdd));
+            this.GDraw = new Microsoft.Msagl.Drawing.Graph("graph");
+            DrawGraph(this.GDraw, OG.getDrawInfo());
+            gViewer1.Graph = this.GDraw;
+
+            // Re-initialize dropdown menu
+            accList = new List<ItemCombo>();
+            findList = new List<ItemCombo>();
+            fromList = new List<ItemCombo>();
+            toList = new List<ItemCombo>();
+            InitializeComboItems(accList, findList, fromList, toList, OG);
+            lbl_Content.Text = "Akun dengan nama " + toAdd + " berhasil ditambahkan.";
+        }
+
+        private void cmb_From_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.from != null)
+            {
+                EditNodeNormal(this.GDraw, this.from);
+            }
+            this.from = cmb_From.SelectedValue.ToString();
+            EditNodeConnection(this.GDraw, this.from);
+            gViewer1.Graph = this.GDraw;
+        }
+
+        private void cmb_To_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.to != null)
+            {
+                EditNodeNormal(this.GDraw, this.to);
+            }
+            this.to = cmb_To.SelectedValue.ToString();
+            EditNodeConnection(this.GDraw, this.to);
+            gViewer1.Graph = this.GDraw;
+        }
+
+        private void btn_AddFromTo_Click(object sender, EventArgs e)
+        {
+            if (this.from == null || this.to == null) return;
+            if (this.from == this.to) { lbl_Content.Text = "Tidak dapat menambahkan koneksi ke diri sendiri"; return; }
+            if (this.OG.findNode(this.from).IsConnected(this.to)) { lbl_Content.Text = "Akun " + from + " dan Akun " + to + " sudah terhubung."; return; }
+            OG.addConnection(this.from, this.to);
+            this.GDraw = new Microsoft.Msagl.Drawing.Graph("graph");
+            DrawGraph(this.GDraw, OG.getDrawInfo());
+            gViewer1.Graph = this.GDraw;
+        }
+
+        private void btn_AddConnection_Click(object sender, EventArgs e)
+        {
+            pnl_AddConnection.Visible = !pnl_AddConnection.Visible;
         }
     }
 }

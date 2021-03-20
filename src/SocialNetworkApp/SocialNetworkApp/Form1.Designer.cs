@@ -29,7 +29,7 @@ namespace SocialNetworkApp
         /// </summary>
         private void InitializeComponent()
         {
-            Microsoft.Msagl.Core.Geometry.Curves.PlaneTransformation planeTransformation6 = new Microsoft.Msagl.Core.Geometry.Curves.PlaneTransformation();
+            Microsoft.Msagl.Core.Geometry.Curves.PlaneTransformation planeTransformation1 = new Microsoft.Msagl.Core.Geometry.Curves.PlaneTransformation();
             this.gViewer1 = new Microsoft.Msagl.GraphViewerGdi.GViewer();
             this.pnl_SideMenu = new System.Windows.Forms.Panel();
             this.btn_Mutual = new System.Windows.Forms.Button();
@@ -64,9 +64,11 @@ namespace SocialNetworkApp
             this.btn_To = new System.Windows.Forms.Button();
             this.cmb_To = new System.Windows.Forms.ComboBox();
             this.btn_AddFromTo = new System.Windows.Forms.Button();
+            this.btn_Pan = new System.Windows.Forms.Button();
             this.pnl_SideMenu.SuspendLayout();
             this.pnl_ExploreFriends.SuspendLayout();
             this.pnl_Logo.SuspendLayout();
+            this.pnl_Bottom.SuspendLayout();
             this.pnl_Main.SuspendLayout();
             this.pnl_Filename.SuspendLayout();
             this.pnl_AddAccount.SuspendLayout();
@@ -107,7 +109,7 @@ namespace SocialNetworkApp
             this.gViewer1.TabIndex = 1;
             this.gViewer1.TightOffsetForRouting = 0.125D;
             this.gViewer1.ToolBarIsVisible = true;
-            this.gViewer1.Transform = planeTransformation6;
+            this.gViewer1.Transform = planeTransformation1;
             this.gViewer1.UndoRedoButtonsVisible = true;
             this.gViewer1.WindowZoomButtonPressed = false;
             this.gViewer1.ZoomF = 1D;
@@ -373,6 +375,7 @@ namespace SocialNetworkApp
             // pnl_Bottom
             // 
             this.pnl_Bottom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(42)))), ((int)(((byte)(54)))));
+            this.pnl_Bottom.Controls.Add(this.btn_Pan);
             this.pnl_Bottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnl_Bottom.Location = new System.Drawing.Point(200, 975);
             this.pnl_Bottom.Name = "pnl_Bottom";
@@ -575,6 +578,19 @@ namespace SocialNetworkApp
             this.btn_AddFromTo.UseVisualStyleBackColor = false;
             this.btn_AddFromTo.Click += new System.EventHandler(this.btn_AddFromTo_Click);
             // 
+            // btn_Pan
+            // 
+            this.btn_Pan.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_Pan.Font = new System.Drawing.Font("Bob Sponge", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_Pan.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(121)))), ((int)(((byte)(198)))));
+            this.btn_Pan.Location = new System.Drawing.Point(995, 0);
+            this.btn_Pan.Name = "btn_Pan";
+            this.btn_Pan.Size = new System.Drawing.Size(100, 43);
+            this.btn_Pan.TabIndex = 3;
+            this.btn_Pan.Text = "Pan Mode";
+            this.btn_Pan.UseVisualStyleBackColor = true;
+            this.btn_Pan.Click += new System.EventHandler(this.btn_Pan_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -592,6 +608,7 @@ namespace SocialNetworkApp
             this.pnl_SideMenu.ResumeLayout(false);
             this.pnl_ExploreFriends.ResumeLayout(false);
             this.pnl_Logo.ResumeLayout(false);
+            this.pnl_Bottom.ResumeLayout(false);
             this.pnl_Main.ResumeLayout(false);
             this.pnl_Filename.ResumeLayout(false);
             this.pnl_AddAccount.ResumeLayout(false);
@@ -635,6 +652,7 @@ namespace SocialNetworkApp
         private System.Windows.Forms.ComboBox cmb_From;
         private System.Windows.Forms.Button btn_From;
         private System.Windows.Forms.Button btn_AddConnection;
+        private System.Windows.Forms.Button btn_Pan;
     }
 }
 

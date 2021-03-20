@@ -221,7 +221,6 @@ namespace SocialNetworkApp
         public Form1() // Konstruktor form (Menginisialisasikan tiap atribut dengan null, dan beberapa komponen tidak dapat dilihat terlebih dahulu pada form)
         {
             InitializeComponent();
-            //this.gViewer1 = new Microsoft.Msagl.GraphViewerGdi.GViewer();
             this.GDraw = null;
             this.OG = null;
             this.account = null;
@@ -235,6 +234,7 @@ namespace SocialNetworkApp
             pnl_ExploreFriends.Size = new Size(200, 181);
             pnl_AddAccount.Visible = false;
             pnl_AddConnection.Visible = false;
+            gViewer1.ToolBarIsVisible = false;
         }
 
         private void gViewer1_Load(object sender, EventArgs e)
@@ -253,6 +253,8 @@ namespace SocialNetworkApp
                 this.OG = new Classes.Graph(fileToOpen);
                 DrawGraph(this.GDraw, OG.getDrawInfo());
                 gViewer1.Graph = this.GDraw;
+                gViewer1.OutsideAreaBrush = Brushes.White;
+                gViewer1.ToolBarIsVisible = false;
                 this.account = null;
                 this.findAccount = null;
                 this.mode = -1;
@@ -379,6 +381,8 @@ namespace SocialNetworkApp
             this.GDraw = new Microsoft.Msagl.Drawing.Graph("graph");
             DrawGraph(this.GDraw, OG.getDrawInfo());
             gViewer1.Graph = this.GDraw;
+            gViewer1.OutsideAreaBrush = Brushes.White;
+            gViewer1.ToolBarIsVisible = false;
             this.account = null;
             this.findAccount = null;
             this.mode = -1;
@@ -416,6 +420,8 @@ namespace SocialNetworkApp
             this.GDraw = new Microsoft.Msagl.Drawing.Graph("graph");
             DrawGraph(this.GDraw, OG.getDrawInfo());
             gViewer1.Graph = this.GDraw;
+            gViewer1.OutsideAreaBrush = Brushes.White;
+            gViewer1.ToolBarIsVisible = false;
 
             // Re-initialize dropdown menu
             accList = new List<ItemCombo>();
@@ -462,6 +468,13 @@ namespace SocialNetworkApp
         private void btn_AddConnection_Click(object sender, EventArgs e)
         {
             pnl_AddConnection.Visible = !pnl_AddConnection.Visible;
+        }
+
+        private void btn_Pan_Click(object sender, EventArgs e)
+        {
+            gViewer1.PanButtonPressed = !(gViewer1.PanButtonPressed);
+            if (gViewer1.PanButtonPressed) { btn_Pan.ForeColor = Color.FromArgb(255, 68, 71, 90); btn_Pan.BackColor = Color.FromArgb(255, 255, 121, 198); }
+            else { btn_Pan.ForeColor = Color.FromArgb(255, 255, 121, 198); btn_Pan.BackColor = Color.FromArgb(255, 40, 42, 54); }
         }
     }
 }

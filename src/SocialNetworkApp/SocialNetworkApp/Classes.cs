@@ -382,7 +382,7 @@ namespace Classes
             list.Sort((a, b) => b.Item2.CompareTo(a.Item2));
             return list;
         }
-        public void removeEdge(string from, string to) // Menghilangkan koneksi antar Node pada Graph (from dan to harus terdapat pada Graph) TEST
+        public void removeEdge(string from, string to) // Menghilangkan koneksi antar Node pada Graph (from dan to harus terdapat pada Graph)
         {
             findNode(from).removeConnection(to);
         }
@@ -400,11 +400,11 @@ namespace Classes
                 node.setFromNodeNull();
             }
         }
-        private void PrintAll(List<string> list) // Method Private untuk meng-output hasil traversal (BFS/DFS) TEST (mungkin ditambahkan getter sebagai sebuah string)
+        private void PrintAll(List<string> list) // Method Private untuk meng-output hasil traversal (BFS/DFS)
         {
             if (list == null)
             {
-                Console.WriteLine("Tidak terdapat jalan"); // TEST mungkin tambah parameter from, to
+                Console.WriteLine("Tidak terdapat jalan");
                 return;
             }
             for (int i = 0; i < list.Count; i++)
@@ -419,10 +419,10 @@ namespace Classes
                 }
             }
         }
-        public string getPrintAll(List<string> list)
+        public string getPrintAll(List<string> list) // Method public untuk mendapatkan hasil traversal (BFS/DFS) dalam bentuk string untuk diperlihatkan dalam GUI
         {
             string toReturn = "Nama Akun: " + list[0] + " dan " + list[list.Count - 1] + "\n";
-            if (list == null) return "Tidak terdapat jalan";
+            if (list == null) return null;
             if (list.Count - 2 == 0) { toReturn += "Direct Connection\n"; }
             else if (list.Count - 2 == 1) { toReturn += "1st Degree Connection\n"; }
             else if (list.Count - 2 == 2) { toReturn += "2nd Degree Connection\n"; }
@@ -460,10 +460,10 @@ namespace Classes
                         Console.WriteLine(tuple.Item3[i] + ".");
                     }
                 }
-                Console.WriteLine(":-----:"); // TEST
+                Console.WriteLine(":-----:");
             }
         }
-        public string getPrintMutuals(string name)
+        public string getPrintMutuals(string name) // Mengembalikan hasil PrintMutuals / Hasil mutual friends dengan format yang tepat (untuk diperlihatkan pada GUI) dalam bentuk string
         {
             var list = getMutuals(name);
             if (list.Count == 0) return "Tidak ada rekomendasi teman untuk akun " + name + "\n";
@@ -500,219 +500,4 @@ namespace Classes
             PrintMutuals(getMutuals(source));
         }
     }
-    /* TEST TEST
-	class Program
-    {
-        static void Main(string[] args) // Main
-        {
-            void PrintAll(List<string> lists)
-            {
-                for (int i = 0; i < lists.Count; i++)
-                {
-                    if (i != lists.Count - 1)
-                    {
-                        Console.Write(lists[i] + "-->");
-                    }
-                    else
-                    {
-                        Console.WriteLine(lists[i] + ".");
-                    }
-                }
-            }
-            void PrintMutuals(List<Tuple<string, int, List<string>>> lists)
-            {
-                foreach (var tuple in lists) // Mutual friends
-                {
-                    Console.WriteLine("Node : " + tuple.Item1);
-                    Console.WriteLine("Count: " + tuple.Item2);
-                    Console.Write("Nodes: ");
-                    for (int i = 0; i < tuple.Item3.Count; i++)
-                    {
-                        if (i != tuple.Item3.Count - 1)
-                        {
-                            Console.Write(tuple.Item3[i] + ", ");
-                        }
-                        else
-                        {
-                            Console.WriteLine(tuple.Item3[i] + ".");
-                        }
-                    }
-                    Console.WriteLine(":-----:");
-                }
-            }
-
-            /*
-            // First
-            Node testNode = new Node("testNode");
-            Node testNode2 = new Node("testNode2");
-            Node testNode3 = new Node("testNode3");
-            Node testNode4 = new Node("testNode4");
-            testNode.print();
-            testNode2.print();
-            testNode3.print();
-
-            testNode.addEdge(testNode2); // indeks 0
-            testNode.addEdge(testNode3); // indeks 1
-
-            testNode.print();
-
-            // testNode.CNodes[0].setVisited();
-            // testNode.CNodes[1].setVisited();
-
-            testNode2.print();
-            testNode3.print();
-
-            testNode.removeConnection("testNode2");
-            testNode.print();
-            testNode2.print();
-
-            testNode2.addEdge(testNode);
-            testNode2.addEdge(testNode); // works
-            testNode2.print();
-
-            testNode4.addEdge(testNode3);
-            testNode4.addEdge(testNode2);
-            testNode4.addEdge(testNode);
-            testNode4.addEdge(testNode4);
-
-            testNode4.print();
-
-            testNode4.SortConnected();
-            testNode4.print();
-
-            */
-
-            /*
-            // Second
-            Graph graph = new Graph();
-            Node gnode1 = new Node("node1");
-            Node gnode2 = new Node("node2");
-            Node gnode3 = new Node("node3");
-            Node gnode4 = new Node("node4");
-            graph.addNode(gnode1);
-            graph.addNode(gnode2);
-            graph.addNode(gnode3);
-            graph.addNode(gnode4);
-            graph.findNode("node1").addEdge(graph.findNode("node2"));
-            graph.findNode("node1").print();
-            graph.findNode("node2").print();
-
-            if (graph.findNode("nodess") == null)
-            {
-                Console.WriteLine("Node nodess not found");
-            }
-            */
-
-            /*
-            // Third
-            Graph graphs = new Graph();
-            graphs.addConnection("node1", "node2");
-            graphs.addConnection("node2", "node3");
-            graphs.addConnection("node4", "node5");
-            // graphs.findNode("node4").getCNodes()[0].setVisited();
-            graphs.print();
-            */
-            /* TEST TEST
-            Graph graphss = new Graph();
-            graphss.addConnection("node1", "node2");
-            graphss.addConnection("node1", "node3");
-            graphss.addConnection("node3", "node4");
-            graphss.addConnection("node2", "node4");
-            graphss.addConnection("node1", "node5");
-            graphss.addConnection("node1", "node6");
-            graphss.addConnection("node5", "node7");
-            graphss.addConnection("node6", "node7");
-            graphss.addConnection("node1", "node8");
-            graphss.addConnection("node8", "node7");
-            
-            PrintMutuals(graphss.getMutuals("node1")); // mutual friends
-
-            var list = graphss.BFS("node1", "node7");
-            PrintAll(list);
-
-            // graphss.print(); TEST
-            
-            Graph secondGraph = new Graph();
-            secondGraph.addConnection("a", "b");
-            secondGraph.addConnection("a", "c");
-            secondGraph.addConnection("a", "d");
-            secondGraph.addConnection("b", "d");
-            secondGraph.addConnection("b", "c");
-            secondGraph.addConnection("b", "f");
-            secondGraph.addConnection("c", "d");
-            secondGraph.addConnection("c", "f");
-
-            var list2 = secondGraph.BFS("a", "f");
-            PrintAll(list2);
-            Node g = new Node("g");
-            secondGraph.addNode(g);
-            var list3 = secondGraph.BFS("a", "g");
-            if (list3 == null) // Tidak ditemukan
-            {
-                Console.WriteLine("Kosong");
-            }
-            // secondGraph.print(); TEST
-            var list4 = secondGraph.DFS("a", "f");
-            PrintAll(list4);
-            var list5 = secondGraph.DFS("a", "g");
-            if (list5 == null)
-            {
-                Console.WriteLine("Kosong2");
-            }
-            // secondGraph.print(); TEST
-            Console.WriteLine("This is the problem from the PDF\n");
-            Graph newGraph = new Graph();
-            newGraph.addConnection("A", "B");
-            newGraph.addConnection("A", "C");
-            newGraph.addConnection("A", "D");
-            newGraph.addConnection("B", "E");
-            newGraph.addConnection("B", "C");
-            newGraph.addConnection("B", "F");
-            newGraph.addConnection("C", "G");
-            newGraph.addConnection("C", "F");
-            newGraph.addConnection("D", "G");
-            newGraph.addConnection("D", "F");
-            newGraph.addConnection("E", "H");
-            newGraph.addConnection("E", "F");
-            newGraph.addConnection("F", "H");
-            Console.WriteLine("Mutuals");
-            PrintMutuals(newGraph.getMutuals("A"));
-            Console.WriteLine("BFS");
-            PrintAll(newGraph.BFS("A", "H"));
-            Console.WriteLine("DFS");
-            PrintAll(newGraph.DFS("A", "H"));
-
-            // READING FROM FILE
-            Console.WriteLine("READING FROM FILE");
-            Graph fileGraph = new Graph();
-            string filename = "../../test.txt";
-            string line;
-            int lineCount;
-            var sr = new StreamReader(filename);
-            line = sr.ReadLine();
-            lineCount = Convert.ToInt32(line); // converting string to int
-            for (int i = 0; i < lineCount; i++)
-            {
-                line = sr.ReadLine();
-                var vars = line.Split(new[] {' '});
-                fileGraph.addConnection(vars[0], vars[1]);
-                Console.WriteLine(line);
-            }
-            sr.Close();
-            Console.WriteLine("Mutuals");
-            PrintMutuals(fileGraph.getMutuals("A"));
-            Console.WriteLine("BFS");
-            PrintAll(fileGraph.BFS("A", "H"));
-            Console.WriteLine("DFS");
-            PrintAll(fileGraph.DFS("A", "H"));
-
-            // Ways to use the class to print
-            Graph testRead = new Graph("test.txt");
-            testRead.WriteMutuals("A");
-            testRead.WritePathBFS("A", "H");
-            testRead.WritePathDFS("A", "H");
-
-            Console.ReadLine();
-        }
-    } TEST TEST */
 }

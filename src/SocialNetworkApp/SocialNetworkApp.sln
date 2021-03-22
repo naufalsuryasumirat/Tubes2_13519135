@@ -8,13 +8,25 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		YoBook|Any CPU = YoBook|Any CPU
+		YoBook|x64 = YoBook|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{DE414DC7-0A1C-409F-919B-D89B29D6D9C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DE414DC7-0A1C-409F-919B-D89B29D6D9C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE414DC7-0A1C-409F-919B-D89B29D6D9C1}.Debug|x64.ActiveCfg = Debug|x64
+		{DE414DC7-0A1C-409F-919B-D89B29D6D9C1}.Debug|x64.Build.0 = Debug|x64
 		{DE414DC7-0A1C-409F-919B-D89B29D6D9C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE414DC7-0A1C-409F-919B-D89B29D6D9C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE414DC7-0A1C-409F-919B-D89B29D6D9C1}.Release|x64.ActiveCfg = Release|x64
+		{DE414DC7-0A1C-409F-919B-D89B29D6D9C1}.Release|x64.Build.0 = Release|x64
+		{DE414DC7-0A1C-409F-919B-D89B29D6D9C1}.YoBook|Any CPU.ActiveCfg = YoBook|Any CPU
+		{DE414DC7-0A1C-409F-919B-D89B29D6D9C1}.YoBook|Any CPU.Build.0 = YoBook|Any CPU
+		{DE414DC7-0A1C-409F-919B-D89B29D6D9C1}.YoBook|x64.ActiveCfg = YoBook|x64
+		{DE414DC7-0A1C-409F-919B-D89B29D6D9C1}.YoBook|x64.Build.0 = YoBook|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,3 +1,2 @@
-.vs/
-src/SocialNetwork/*
-src/SocialNetworkAppGUI/*
+src/SocialNetworkApp/SocialNetworkApp/bin/Release/*
+src/SocialNetworkApp/SocialNetworkApp/obj/*

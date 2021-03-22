@@ -1,6 +1,0 @@
-C:\Users\Noler\Git\Tubes2_13519135\src\bin\Debug\ConsoleApplication.exe
-C:\Users\Noler\Git\Tubes2_13519135\src\bin\Debug\ConsoleApplication.pdb
-C:\Users\Noler\Git\Tubes2_13519135\src\obj\x86\Debug\Graph.csprojAssemblyReference.cache
-C:\Users\Noler\Git\Tubes2_13519135\src\obj\x86\Debug\Graph.csproj.CoreCompileInputs.cache
-C:\Users\Noler\Git\Tubes2_13519135\src\obj\x86\Debug\ConsoleApplication.exe
-C:\Users\Noler\Git\Tubes2_13519135\src\obj\x86\Debug\ConsoleApplication.pdb

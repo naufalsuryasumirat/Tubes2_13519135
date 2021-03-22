@@ -1,0 +1,19 @@
+18
+Bob Mike
+Bob Emma
+Bob Jill
+Bob John
+John Jill
+John Shane
+John Leah
+Leah Jill
+Leah Shane
+Shane Jill
+Shane Emma
+Shane Liz
+Emma Jill
+Emma Liz
+Emma Mike
+Jill Mike
+Liz Allen
+Allen Lisa

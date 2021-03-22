@@ -174,7 +174,6 @@ namespace Classes
             this.NodeList = new List<Node>();
             this.DrawInfo = new List<Tuple<string, string>>();
             Console.WriteLine("READING FROM FILE"); // TEST
-            //string filenameRead = "../../test/" + filename; // TEST
             string filenameRead = filename; // TEST READINGFILE
             string line;
             int lineCount;

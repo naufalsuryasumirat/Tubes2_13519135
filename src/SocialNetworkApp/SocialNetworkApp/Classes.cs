@@ -8,20 +8,20 @@ using System.IO;
 namespace Classes
 {
     // Define classes here
-    // nanti yang ditandain TEST diapus / dicek
 	public class Node // Class Node (Simpul)
     {
         private Node fromNode; // Menyimpan Node sebelumnya yang dilewati untuk mencapai Node ini (Digunakan untuk Algoritma Breadth-First Search dan Depth-First Search)
         private string Name; // Menyimpan Nama dari simpul
 		private bool Visited; // Status telah dikunjungi atau belum
         private List<Node> CNodes; // Menyimpan Node/Simpul yang bertetangga (adjacent)
-        private int Count; // Menyimpan jumlah node yang bertetangga (Mungkin tidak perlu) TEST
-        public Node() // Default Constructor, mungkin tidak digunakan TEST
+        private int Count; // Menyimpan jumlah node yang bertetangga
+        public Node() // Default Constructor
         {
             this.fromNode = null;
             this.Name = null;
             this.CNodes = new List<Node>();
             this.Visited = false;
+            this.Count = 0;
         }
         public Node(string Name) // User-defined Constructor, fromNode = null, Name = parameter Name, CNodes = List<Node> baru yang kosong, Status Dikunjungi = false, Count = 0
         {
@@ -157,7 +157,7 @@ namespace Classes
             {
                 Console.WriteLine(this.fromNode.getName());
             }
-            Console.WriteLine(); // TEST
+            Console.WriteLine();
         }
     }
     class Graph
@@ -173,8 +173,8 @@ namespace Classes
         {
             this.NodeList = new List<Node>();
             this.DrawInfo = new List<Tuple<string, string>>();
-            Console.WriteLine("READING FROM FILE"); // TEST
-            string filenameRead = filename; // TEST READINGFILE
+            Console.WriteLine("READING FROM FILE"); // Penanda reading file
+            string filenameRead = filename;
             string line;
             int lineCount;
             var readFile = new StreamReader(filenameRead);
@@ -186,7 +186,7 @@ namespace Classes
                 var vars = line.Split(new[] {' '});
                 DrawInfo.Add(Tuple.Create(vars[0], vars[1])); // Menaruh informasi pada DrawInfo untuk digambar
                 this.addConnection(vars[0], vars[1]);
-                Console.WriteLine(line); // TEST
+                Console.WriteLine(line); // debugging purposes
             }
             readFile.Close();
         }
@@ -258,7 +258,7 @@ namespace Classes
             {
                 return null;
             } 
-            Console.WriteLine("Visiting " + findNode(from).getName()); // TEST
+            Console.WriteLine("Visiting " + findNode(from).getName()); // Proses visiting nodes ditulis di console
             findNode(from).setVisited();
             list.Add(findNode(from));
             while (list.Count > 0)
@@ -267,7 +267,7 @@ namespace Classes
                 {
                     if (!node.getStatus() && node.getName() != from && node.getName() != to)
                     { 
-                        Console.WriteLine("Visiting " + node.getName()); // TEST
+                        Console.WriteLine("Visiting " + node.getName()); // Proses visiting nodes ditulis di console
                         node.setFromNode(list[0]);
                         node.setVisited();
                         list.Add(node);
@@ -279,7 +279,6 @@ namespace Classes
                         destination.setFromNode(list[0]);
                         destination.setVisited();
                         list.Clear();
-                        // print(); TEST
                         while (destination.getName() != from)
                         {
                             listStr.Add(destination.getName());
@@ -296,11 +295,11 @@ namespace Classes
             }
             setAllFNNull();
             setAllUnvisited();
-            return null; // Mungkin kasus gaketemu destination?? TEST
+            return null; // Kasus tidak ditemukan path
         }
         public void DFSrec(Node node, string from) // Menelusuri Graph secara DFS (rekursif), dimulai dari Node dengan Name = from
         {
-            Console.WriteLine("Visiting " + node.getName()); // TEST
+            Console.WriteLine("Visiting " + node.getName());
             node.setVisited();
             foreach (var dfsnode in node.getCNodes())
             {
